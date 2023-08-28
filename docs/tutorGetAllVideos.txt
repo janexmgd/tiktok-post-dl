@@ -1,0 +1,34 @@
+source = https://stackoverflow.com/questions/59690743/scraping-all-videos-from-a-tiktok-profile
+edit line 31 to change filename
+//COPY & PASTE CODE 1:
+
+let goToBottom = setInterval(() => window.scrollBy(0, 400), 1000);
+
+--wait until scrool done
+
+//COPY & PASTE CODE 2:
+
+clearInterval(goToBottom);
+let arrayVideos = [];
+console.log('\n'.repeat(50));
+const containers = document.querySelectorAll('[class*="-DivItemContainerV2"]');  
+for (const container of containers) {
+    const link = container.querySelector('[data-e2e="user-post-item"] a');
+    const title = container.querySelector('[data-e2e="user-post-item-desc"] a');
+    //If the link is https://www.tiktok.com/, set it as the current page URL
+    if (link.href === 'https://www.tiktok.com/') link.href = window.location.href;
+    arrayVideos.push(link.href);
+    console.log(link.href);
+}
+//CoPY & PASTE CODE 3
+let videoLinks = arrayVideos.filter(link => link.includes('/video'));
+
+let formattedData = videoLinks.join('\n');
+
+let blob = new Blob([formattedData], { type: 'text/plain' });
+let elem = window.document.createElement('a');
+elem.href = window.URL.createObjectURL(blob);
+elem.download = 'video_links.txt';
+document.body.appendChild(elem);
+elem.click();
+document.body.removeChild(elem);
