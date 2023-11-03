@@ -20,16 +20,11 @@ const main = async (taskNum) => {
     const input = await inquirer.prompt([
       {
         type: 'input',
-        name: 'foldername',
-        message: 'insert folder name to save your download',
-      },
-      {
-        type: 'input',
-        name: 'filename',
-        message: 'insert filename of list tiktok url',
+        name: 'username',
+        message: 'insert tiktok username',
       },
     ]);
-    await bulkDownloader(input.filename, input.foldername);
+    await bulkDownloader(input.username);
   } else {
     console.log('invalid action lmao');
   }

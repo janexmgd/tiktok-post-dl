@@ -79,7 +79,7 @@ This project is about developing tools for downloading media from tiktok post us
 
 thx to thread at https://stackoverflow.com/questions/59690743/scraping-all-videos-from-a-tiktok-profile
 
-You can see at <a href='./docs/tutorGetAllVideos.txt'>version txt</a>
+You can see at <a href='./docs/tutorGetAllVideos.txt'>how to catch all link</a>
 
 1. Open the target tiktok profile
 2. Open console menu at your broswer(Iam using brave broswer at Xubuntu) and copy this code
