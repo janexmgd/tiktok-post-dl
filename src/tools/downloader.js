@@ -1,6 +1,6 @@
 import path from 'path';
 import client from './client.js';
-import getTiktokNoWM from './parser.js';
+import getTiktokNoWM from './parserEnc.js';
 import fs from 'fs';
 import ProgressBar from '../utils/progressBar.js';
 import { formatFileSize, formatSpeed } from '../utils/formatter.js';
