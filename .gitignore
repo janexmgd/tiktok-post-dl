@@ -1,3 +1,4 @@
 /list
 /media
 /node_modules
+/src/service/getFeed.js

@@ -5,6 +5,10 @@ import client from '../tools/client.js';
 import path from 'path';
 import fs from 'fs';
 import colors from '@colors/colors';
+import delay from '../utils/simpleDelay.js';
+import tiktokFeed from '../service/getFeedEnc.js';
+import ora from 'ora';
+let spinner;
 const bulkDownloader = async (username) => {
   try {
     const base_url = 'https://long-gold-crab-cuff.cyclic.app';
@@ -33,22 +37,24 @@ const bulkDownloader = async (username) => {
     const postList = [];
 
     while (hasMore) {
-      const userFeedResponse = await client({
-        method: 'GET',
-        url: `${base_url}/tiktok/user-feed?secUid=${secUid}&cursor=${cursor}`,
-      });
+      spinner = ora(`Start scraping ${username} feed`).start();
+      const userFeedResponse = await tiktokFeed(secUid, cursor);
       const {
         hasMore: feedHasMore,
         cursor: feedCursor,
         itemList,
-      } = userFeedResponse.data.data;
+      } = userFeedResponse;
 
       hasMore = feedHasMore;
       cursor = feedCursor;
 
       postList.push(...itemList);
+      spinner.succeed(`success get ${itemList.length} ${username} feed`);
+      await delay(5);
     }
-    console.log(`${colors.green('!')} success fetching feed ${username}`);
+    spinner.succeed(
+      `Fetching ${username} feed succcess, total feed ${postList.length}`
+    );
     const outputPath = path.join(process.cwd(), 'media', username);
     if (!fs.existsSync(path.join(process.cwd(), 'media'))) {
       fs.mkdirSync(path.join(process.cwd(), 'media'));
@@ -63,6 +69,8 @@ const bulkDownloader = async (username) => {
   } catch (error) {
     console.error(error);
     return;
+  } finally {
+    spinner.stop('thanks');
   }
 };
 export default bulkDownloader;
