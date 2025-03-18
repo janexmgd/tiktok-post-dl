@@ -1,19 +1,27 @@
 import downloader from '../tools/downloader.js';
-import path from 'path';
-import fs from 'fs';
-import delay from '../utils/simpleDelay.js';
+import chalk from 'chalk';
 
-const singleDownloader = async (url, foldername) => {
+const singleDownloader = async (url) => {
   try {
-    console.clear();
-    const outputPath = path.join(process.cwd(), 'media', foldername);
-    if (!fs.existsSync(path.join(process.cwd(), 'media'))) {
-      fs.mkdirSync(path.join(process.cwd(), 'media'));
+    const response = await fetch('https://saio-api.vercel.app/service', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ url }),
+    });
+    if (!response.ok) {
+      console.log(
+        chalk.red(
+          `Failed to fetch service for URL: ${url}, Status: ${response.status}`
+        )
+      );
+      return;
     }
-    console.log(`file will saved at ${outputPath}`);
-    await downloader(foldername, url, 1, 1);
-    console.log(`Success download post from ${url}`);
-    await delay(2);
+    const data = await response.json();
+    const cookie = data.data.cookie;
+    const ttData = data.data;
+    await downloader(ttData, cookie);
   } catch (error) {
     console.log(error);
   }

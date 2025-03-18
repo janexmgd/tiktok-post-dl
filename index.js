@@ -1,6 +1,6 @@
 import runner from './src/index.js';
 
 (async () => {
-  console.clear();
+  process.stdout.write('\x1Bc');
   await runner();
 })();

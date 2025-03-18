@@ -9,22 +9,17 @@ const main = async (taskNum) => {
         name: 'url',
         message: 'insert tiktok link',
       },
-      {
-        type: 'input',
-        name: 'foldername',
-        message: 'insert folder name to save your download',
-      },
     ]);
-    await singleDownloader(input.url, input.foldername);
+    await singleDownloader(input.url);
   } else if (taskNum == 2) {
     const input = await inquirer.prompt([
       {
         type: 'input',
-        name: 'username',
-        message: 'insert tiktok username',
+        name: 'filename',
+        message: 'insert filename(must at list download)',
       },
     ]);
-    await bulkDownloader(input.username);
+    await bulkDownloader(input.filename);
   } else {
     console.log('invalid action lmao');
   }

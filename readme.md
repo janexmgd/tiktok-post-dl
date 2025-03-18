@@ -79,7 +79,9 @@ This project is about developing tools for downloading media from tiktok post us
 
 thx to thread at https://stackoverflow.com/questions/59690743/scraping-all-videos-from-a-tiktok-profile
 
-You can see at <a href='./docs/tutorGetAllVideos.txt'>how to catch all link</a>
+You can use this [tampermonkey script](https://github.com/janexmgd/tampermonkey-scripts) (bug at slow network maybe)
+
+or using this
 
 1. Open the target tiktok profile
 2. Open console menu at your broswer(Iam using brave broswer at Xubuntu) and copy this code
@@ -91,35 +93,31 @@ let goToBottom = setInterval(() => window.scrollBy(0, 400), 1000);
 3. Wait until scrool done, after scrool done copy this code to the console like step 2
 
 ```js
-clearInterval(goToBottom);
-let arrayVideos = [];
-console.log('\n'.repeat(50));
-const containers = document.querySelectorAll('[class*="-DivItemContainerV2"]');
-for (const container of containers) {
-  const link = container.querySelector('[data-e2e="user-post-item"] a');
-  const title = container.querySelector('[data-e2e="user-post-item-desc"] a');
-  if (link.href === 'https://www.tiktok.com/') {
-    link.href = window.location.href;
+setTimeout(() => {
+  clearInterval(goToBottom);
+  console.log('Finished scrolling. Starting to extract video links...');
+  let arrayVideos = [];
+  const containers = document.querySelectorAll(
+    '[class*="-DivItemContainerV2"]'
+  );
+  for (const container of containers) {
+    const link = container.querySelector('[data-e2e="user-post-item"] a');
+    if (link && link.href) {
+      arrayVideos.push(link.href);
+    }
   }
-  arrayVideos.push(link.href);
-  console.log(link.href);
-}
-```
 
-4. after this copy this code, edit the video_links.txt to change filename
+  console.log('Video links extracted:', arrayVideos);
 
-```js
-let videoLinks = arrayVideos.filter((link) => link.includes('/video'));
-
-let formattedData = videoLinks.join('\n');
-
-let blob = new Blob([formattedData], { type: 'text/plain' });
-let elem = window.document.createElement('a');
-elem.href = window.URL.createObjectURL(blob);
-elem.download = 'video_links.txt';
-document.body.appendChild(elem);
-elem.click();
-document.body.removeChild(elem);
+  const blob = new Blob([arrayVideos.join('\n')], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'video_links.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  console.log('File downloaded as video_links.txt');
+}, 30000);
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
