@@ -3,3 +3,4 @@
 /node_modules
 /src/service/getFeed.js
 /src/tools/parser.js
+/download
